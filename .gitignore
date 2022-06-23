@@ -11,6 +11,8 @@ Thumbs.db
 .idea/
 *.PEM
 .vscode/
+.eslintignore
+.editorconfig
 
 # Logs
 npm-debug.log
