@@ -3,27 +3,26 @@ import { httpServer } from './src/http_server/index.js';
 // import robot from 'robotjs';
 import WebSocket, { WebSocketServer } from 'ws';
 // @ts-ignore
+import { serverConnection } from './src/controllers/serverConnection.ts';
+// @ts-ignore
 import { serverController } from './src/controllers/serverController.ts';
+import * as dotenv from 'dotenv';
+import { resolve } from 'path';
+import { cwd } from 'process';
 
-const HTTP_PORT = 3000;
+dotenv.config({ path: resolve(cwd(), '.env') });
+
+const HTTP_PORT = process.env.HTTP_PORT || 3000;
+const WSS_PORT = process.env.WSS_PORT || 8080;
 
 console.log(`Start static http server on the ${HTTP_PORT} port!!!!`);
 httpServer.listen(HTTP_PORT);
 
-const wss = new WebSocketServer({ port: 8080 });
-wss.onopen = () => console.log('open');
-wss.on('connection', function connection(ws: WebSocket) {
-  ws.on('message', (data) => {
-    serverController(data, ws);
-  });
-  ws.send('something!!!!!!!!!!!!');
-  ws.on('close', () => ws.close());
-});
+export const wss: WebSocket.Server<WebSocket.WebSocket> = new WebSocketServer({ port: WSS_PORT });
 
-// ws.on('close', () => ws.close();
-// wss.on('close', () => wss.close());
+wss.on('connection', serverConnection);
+
+wss.on('close', () => {
+  wss.close();
+});
 process.on('SIGINT', () => wss.close());
-
-wss.on('close', function () {
-  console.log('close');
-});
