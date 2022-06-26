@@ -3,7 +3,7 @@ import { drawRectangle } from './drawCommands/drawRectangle';
 import { drawCircle } from './drawCommands/drawCircle';
 import { printScreen } from './drawCommands/printScreen';
 
-export const serverController = ((command :string, props: string[]) => {
+export const serverController = (async (command :string, props: string[]) => {
   let mouseNew: {x: number, y: number} = robot.getMousePos();
   const result = `${command}{${props[0]}px}\0`;
 
@@ -33,7 +33,7 @@ export const serverController = ((command :string, props: string[]) => {
         return `${command}{${props[0]}px}\0`;
       case 'prnt_scrn':
         // robot.moveMouse(mouseNew.x + Number(props[0]),  mouseNew.y);
-        printScreen(mouseNew.x, mouseNew.y);
+        await printScreen(mouseNew.x, mouseNew.y);
         return `${command}{base64-string(png--buf)}\0`;
       default:
         return 'NO command';
