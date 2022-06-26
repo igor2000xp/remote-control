@@ -9,23 +9,12 @@ export const printScreen = async (x:number, y: number) => {
     constants.WIDE_SCREEN_CAPTURE,
     constants.HEIGHT_SCREEN_CAPTURE);
 
-  const result = new Jimp({
+  const jimp = new Jimp({
     "data": print.image,
     "width": constants.WIDE_SCREEN_CAPTURE,
     "height": constants.HEIGHT_SCREEN_CAPTURE
   });
 
-  return await result.getBase64Async(Jimp.MIME_JPEG);
+  return await jimp.getBase64Async(Jimp.MIME_JPEG);
 
 };
-
-
-// import robot from 'robotjs';
-
-
-// export const printScreen = async () => {
-//   const { x, y } = robot.getMousePos()
-
-
-  // return await result.getBase64Async(Jimp.MIME_JPEG)
-// };
