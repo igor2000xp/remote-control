@@ -1,1 +1,3 @@
 export const CLOSE_INTERVAL = 25000;
+export const WIDE_SCREEN_CAPTURE = 200;
+export const HEIGHT_SCREEN_CAPTURE = 200;
