@@ -23,30 +23,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wss = void 0;
-// import Jimp from 'jimp';
-// @ts-ignore
-const index_1 = require("./http_server/index");
-// import robot from 'robotjs';
-// @ts-ignore
-const ws_1 = require("ws");
-// @ts-ignore
-const serverConnection_1 = require("./controllers/serverConnection");
-const dotenv = __importStar(require("dotenv"));
-const path_1 = require("path");
-const process_1 = require("process");
-dotenv.config({ path: (0, path_1.resolve)((0, process_1.cwd)(), '.env') });
-const HTTP_PORT = process.env.HTTP_PORT || 3000;
-const WSS_PORT = process.env.WSS_PORT || 8080;
-console.log(`Start static http server on the ${HTTP_PORT} port!!!!`);
-index_1.httpServer.listen(HTTP_PORT);
-exports.wss = new ws_1.WebSocketServer({ port: Number(WSS_PORT) });
-exports.wss.on('connection', serverConnection_1.serverConnection);
-exports.wss.on('close', () => {
-    exports.wss.close();
-    process.exit(0);
-});
-process.on('SIGINT', () => {
-    exports.wss.close();
-    process.exit(0);
+exports.httpServer = void 0;
+const fs = __importStar(require("fs"));
+const path = __importStar(require("path"));
+const http = __importStar(require("http"));
+exports.httpServer = http.createServer(function (req, res) {
+    const __dirname = path.resolve(path.dirname(''));
+    const file_path = __dirname + (req.url === '/' ? '/front/index.html' : '/front' + req.url);
+    fs.readFile(file_path, function (err, data) {
+        if (err) {
+            res.writeHead(404);
+            res.end(JSON.stringify(err));
+            return;
+        }
+        res.writeHead(200);
+        res.end(data);
+    });
 });

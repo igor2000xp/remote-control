@@ -1,11 +1,8 @@
 // import Jimp from 'jimp';
-import { httpServer } from './src/http_server/index.js';
+import { httpServer } from './http_server';
 // import robot from 'robotjs';
 import WebSocket, { WebSocketServer } from 'ws';
-// @ts-ignore
-import { serverConnection } from './src/controllers/serverConnection.ts';
-// @ts-ignore
-import { serverController } from './src/controllers/serverController.ts';
+import { serverConnection } from './controllers/serverConnection';
 import * as dotenv from 'dotenv';
 import { resolve } from 'path';
 import { cwd } from 'process';
@@ -18,11 +15,15 @@ const WSS_PORT = process.env.WSS_PORT || 8080;
 console.log(`Start static http server on the ${HTTP_PORT} port!!!!`);
 httpServer.listen(HTTP_PORT);
 
-export const wss: WebSocket.Server<WebSocket.WebSocket> = new WebSocketServer({ port: WSS_PORT });
+export const wss: WebSocket.Server<WebSocket.WebSocket> = new WebSocketServer({ port: Number(WSS_PORT) });
 
 wss.on('connection', serverConnection);
 
 wss.on('close', () => {
   wss.close();
+  process.exit(0);
 });
-process.on('SIGINT', () => wss.close());
+process.on('SIGINT', () => {
+  wss.close();
+  process.exit(0);
+});

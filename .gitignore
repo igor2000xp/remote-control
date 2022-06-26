@@ -1,5 +1,8 @@
 # dependencies
 /node_modules
+/dist
+/build
+/front
 
 # System Files
 .DS_Store

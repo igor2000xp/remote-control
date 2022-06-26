@@ -1,7 +1,5 @@
-
-// @ts-ignore
-import { serverController } from './serverController.ts';
-import { Duplex } from 'ws';
+import { serverController } from './serverController';
+import { Duplex } from 'stream';
 
 export const readableStream = (duplex: Duplex) => {
   let data = '';
